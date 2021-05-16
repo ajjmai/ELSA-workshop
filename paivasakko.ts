@@ -1,6 +1,6 @@
 // run: npx ts-node paivasakko.ts
 
-const laskeYhdenPaivasakonMaara = (kuukausitulo: number, elatettavienMaara: number): number => {
+function laskeYhdenPaivasakonMaara(kuukausitulo: number, elatettavienMaara: number): number {
   const peruskulutusvahennus: number = 255
   const paivasakonMinimiMaara: number = 6
   const elatusvahennus: number = 3 * elatettavienMaara
@@ -16,7 +16,7 @@ const laskeYhdenPaivasakonMaara = (kuukausitulo: number, elatettavienMaara: numb
   }
 }
 
-const laskeSakonKokonaismaara = (yhdenPaivasakonMaara: number, kpl: number, ylinopeyssakko: string | null): number => {
+function laskeSakonKokonaismaara(yhdenPaivasakonMaara: number, kpl: number, ylinopeyssakko: string | null): number {
   const sakonKokonaismaara: number = yhdenPaivasakonMaara * kpl
   const ylinopeussakkojenMinimimaarat = {
     mopo: 100,
