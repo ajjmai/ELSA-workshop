@@ -4,36 +4,71 @@ const onkoEnsikertalainen: boolean = true
 const onkoKokoRangaistusAika: boolean = false
 const onkoSakonMuutonrangaistus: boolean = false
 
-function laskeMinimiPituus(pituus: number, kerroin: number, vahimmaisPituus: number) {
-  return Math.max(pituus * kerroin, vahimmaisPituus)
-}
+function laskeVankeudenVahimmaisPituus(): number {
 
-function laskeVankeudenVahimmaisPituus(pituus: number): number {
+  // sakon muuntorangaistus
   if (onkoSakonMuutonrangaistus) {
-    return pituus
+    return rangaistuksenPituusVuosina
   }
 
+  // koko rangaistusaikaa suorittava
   if (onkoKokoRangaistusAika) {
     const vahimmaisPituus = 3
+    const vankeudenPituus = rangaistuksenPituusVuosina * (5 / 6)
 
-    // return Math.max(pituus * (5 / 6), vahimmaisPituus)
-
-    return laskeMinimiPituus(pituus, 5 / 6, vahimmaisPituus)
-  }
-
-  const vahimmaisPituus = 1 / 24 // 14 päivää -> 1/24 vuosi
-
-  if (onkoEnsikertalainen) {
-    if (vanginIka < 21) {
-      return laskeMinimiPituus(pituus, 1 / 3, vahimmaisPituus)
+    if (vankeudenPituus < vahimmaisPituus) {
+      return vahimmaisPituus
     } else {
-      return laskeMinimiPituus(pituus, 0.5, vahimmaisPituus)
+      return vankeudenPituus
     }
   }
 
-  if (vanginIka < 21) {
-    return laskeMinimiPituus(pituus, 0.5, vahimmaisPituus)
+  // ensikertalainen
+  if (onkoEnsikertalainen) {
+    const vahimmaisPituus = 1 / 24 // 14 päivää -> 1/24 vuosi
+
+    // ensikertalainen, alle 21-v.
+    if (vanginIka < 21) {
+      const vankeudenPituus = rangaistuksenPituusVuosina * 1/3
+
+      if (vankeudenPituus < vahimmaisPituus) {
+        return vahimmaisPituus
+      } else {
+        return vankeudenPituus
+      }
+
+      // ensikertalainen, yli 21-v.
+    } else {
+      const vankeudenPituus = rangaistuksenPituusVuosina * 1/2
+
+      if (vankeudenPituus < vahimmaisPituus) {
+        return vahimmaisPituus
+      } else {
+        return vankeudenPituus
+      }
+    }
   }
 
-  return laskeMinimiPituus(pituus, 2 / 3, vahimmaisPituus)
+  // ei-ensikertalainen, alle 21-v.
+  if (vanginIka < 21) {
+    const vahimmaisPituus = 1 / 24 // 14 päivää -> 1/24 vuosi
+    const vankeudenPituus = rangaistuksenPituusVuosina * 1/2
+
+    if (vankeudenPituus < vahimmaisPituus) {
+      return vahimmaisPituus
+    } else {
+      return vankeudenPituus
+    }
+
+    // ei-ensikertalainen, yli 21-v.
+  } else {
+    const vahimmaisPituus = 1 / 24 // 14 päivää -> 1/24 vuosi
+    const vankeudenPituus = rangaistuksenPituusVuosina * 2/3
+    
+    if (vankeudenPituus < vahimmaisPituus) {
+      return vahimmaisPituus
+    } else {
+      return vankeudenPituus
+    }
+  }
 }
